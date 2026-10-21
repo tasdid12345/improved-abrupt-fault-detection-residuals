@@ -1,0 +1,33 @@
+{
+  "question": "Can a class-balanced LightGBM classifier on residual windows detect abrupt parameter faults in a simulated dynamic system with fewer missed faults and false alarms than a standard model-based residual-threshold detector?",
+  "method": "Seeded numpy simulation of a discrete-time mass-spring-damper with abrupt stiffness/damping faults; episode-level stratified train/test split; grouped-CV tuning on train only; window-level evaluation on unseen test episodes.",
+  "dataset": {
+    "name": "Simulated mass-spring-damper (numpy, seed 42)",
+    "source_url": "synthetic: generated in analysis.py, no download",
+    "n_rows": 115440,
+    "n_train": 86580,
+    "n_test": 28860,
+    "same_as_paper": false,
+    "baseline_is_papers_method": false
+  },
+  "metric_name": "F1 for fault class on test windows",
+  "higher_is_better": true,
+  "baseline": "Nominal ARX(2,2) one-step-ahead predictor fit by least squares on fault-free training episodes; |residual| smoothed causally over 10 samples; alarm when above the 99.5th percentile of fault-free training residuals.",
+  "improved": "Class-balanced LightGBM classifier on sliding-window (length 20) features of residual, |residual|, output and input statistics; labels faulty once the window ends after fault onset; hyper-parameters chosen by grouped 3-fold CV on training episodes.",
+  "metrics": {
+    "baseline_score": 0.47276563099347907,
+    "improved_score": 0.6114085074540955,
+    "improvement": 0.1386428764606164,
+    "baseline_score_std": 0.0,
+    "improved_score_std": 0.0,
+    "baseline_far": 0.0035844863431070324,
+    "improved_far": 0.17657179726145245,
+    "baseline_miss_rate": 0.4193548387096773,
+    "improved_miss_rate": 0.0,
+    "baseline_delay_samples": 150.29032258064515,
+    "improved_delay_samples": 22.80645161290322,
+    "baseline_threshold": 0.1255069357847567,
+    "cv_best_fault_f1": 0.5408065442917943
+  },
+  "notes": "Single simulated system and fault family; 240 episodes of 500 samples, 25% held out by episode. Baseline has no randomness, so its std is 0. Improved std is across LightGBM seeds 42-44 only. Detection delay counts missed faults as the remaining episode length. Windows before sample 19 are not scored for either model. Results are specific to this simulator and are not the paper's result."
+}
