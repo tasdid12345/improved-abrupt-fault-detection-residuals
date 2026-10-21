@@ -30,6 +30,30 @@ python analysis.py
 
 Results are written to `results.json`. Charts are saved to `figures/`.
 
+## Results (latest run)
+
+On a simulated mass-spring-damper dataset, a class-balanced LightGBM classifier reached a fault-class test F1 of 0.61 versus 0.47 for a standard model-based residual-threshold detector, but its false-alarm rate rose from 0.4% to 17.7% while missed faults fell from 41.9% to 0%.
+
+| Metric | Value |
+|---|---|
+| baseline_score | 0.4728 |
+| improved_score | 0.6114 |
+| improvement | 0.1386 |
+| baseline_score_std | 0 |
+| improved_score_std | 0 |
+| baseline_far | 0.003584 |
+| improved_far | 0.1766 |
+| baseline_miss_rate | 0.4194 |
+| improved_miss_rate | 0 |
+| baseline_delay_samples | 150.3 |
+| improved_delay_samples | 22.81 |
+| baseline_threshold | 0.1255 |
+| cv_best_fault_f1 | 0.5408 |
+
+Run on 2026-10-21. Full output: [results.json](results.json) · [run.log](run.log)
+
+Notes: Single simulated system and fault family; 240 episodes of 500 samples, 25% held out by episode. Baseline has no randomness, so its std is 0. Improved std is across LightGBM seeds 42-44 only. Detection delay counts missed faults as the remaining episode length. Windows before sample 19 are not scored for either model. Results are specific to this simulator and are not the paper's result.
+
 ## Reference
 
 This project is motivated by the following paper:
